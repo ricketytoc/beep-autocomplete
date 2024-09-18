@@ -7,32 +7,33 @@ interface OptionListProps<T> {
   renderOption: (option: T) => React.ReactNode 
   value: T[] 
   compareValues: (val: T, option: T) => boolean 
-  highlightedIndex: number;
-  onMouseEnter: (index: number) => void;
+  highlightedIndex: number 
+  onMouseEnter: (index: number) => void 
+  onMouseLeave: () => void 
 }
 const OptionList = forwardRef<HTMLUListElement, OptionListProps<any>>(
-  ({ options, onSelect, renderOption, value, compareValues, inputValue, highlightedIndex, onMouseEnter }, ref) => {
+  ({ options, onSelect, renderOption, value, compareValues, inputValue, highlightedIndex, onMouseEnter, onMouseLeave }, ref) => {
     const ulRef = useRef<HTMLUListElement | null>(null)
 
     useEffect(() => {
-        if (ulRef.current && highlightedIndex >= 0) { // Ensure highlightedIndex is valid
-          const highlightedElement = ulRef.current.children[highlightedIndex] as HTMLElement | undefined;
+        if (ulRef.current && highlightedIndex >= 0) { 
+          const highlightedElement = ulRef.current.children[highlightedIndex] as HTMLElement | undefined 
           if (highlightedElement) {
             highlightedElement.scrollIntoView({
               block: 'nearest',
-              behavior: 'smooth',
-            });
+              behavior: 'auto',
+            }) 
           }
         }
       }, [highlightedIndex])
+
     return (
     <ul ref={(el) => {
-        ulRef.current = el;
+        ulRef.current = el 
         if (typeof ref === 'function') {
-          ref(el);
+          ref(el) 
         } else if (ref) {
-          // @ts-ignore: TypeScript will not recognize this but it's safe
-          ref.current = el;
+          ref.current = el 
         }
       }}>
       {inputValue !== '' && options.length > 0 ? (
@@ -42,6 +43,7 @@ const OptionList = forwardRef<HTMLUListElement, OptionListProps<any>>(
                 onClick={() => onSelect(option)} 
                 className={highlightedIndex === index ? 'highlighted' : ''}
                 onMouseEnter={() => onMouseEnter(index)}
+                onMouseLeave={() => onMouseLeave()}
             >
             {renderOption(option)}
             <input 

@@ -38,37 +38,41 @@ const Autocomplete = <T extends string | { label: string, value: any }>({
   }: AutocompleteProps<T>) => {
     const [filteredOptions, setFilteredOptions] = useState<T[]>([])
     const [showOptions, setShowOptions] = useState<boolean>(false)
-    const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+    const [highlightedIndex, setHighlightedIndex] = useState<number>(-1) 
 
     const referenceRef = useRef<HTMLInputElement | null>(null)
     const floatingRef = useRef<HTMLUListElement | null>(null)
 
     const handleMouseEnter = (index: number) => {
-      setHighlightedIndex(index);
-    };
+      setHighlightedIndex(index) 
+    } 
+
+    const handleMouseLeave = () => {
+      setHighlightedIndex(-1) 
+    } 
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
       switch (event.key) {
         case 'ArrowDown':
-          event.preventDefault();
-          setHighlightedIndex((prevIndex) => (prevIndex + 1) % filteredOptions.length);
-          break;
+          event.preventDefault() 
+          setHighlightedIndex((prevIndex) => (prevIndex + 1) % filteredOptions.length) 
+          break 
         case 'ArrowUp':
-          event.preventDefault();
+          event.preventDefault() 
           setHighlightedIndex((prevIndex) => 
             (prevIndex - 1 + filteredOptions.length) % filteredOptions.length
-          );
-          break;
+          ) 
+          break 
         case 'Enter':
           if (highlightedIndex >= 0) {
-            handleOptionSelect(filteredOptions[highlightedIndex]);
+            handleOptionSelect(filteredOptions[highlightedIndex]) 
           }
-          break;
+          break 
         case 'Escape':
-          setShowOptions(false);
-          break;
+          setShowOptions(false) 
+          break 
         default:
-          break;
+          break 
       }
     }
 
@@ -137,7 +141,7 @@ const Autocomplete = <T extends string | { label: string, value: any }>({
       }
 
       if (referenceRef.current) {
-        referenceRef.current.focus();
+        referenceRef.current.focus() 
       }
     }
   
@@ -197,6 +201,7 @@ const Autocomplete = <T extends string | { label: string, value: any }>({
           compareValues={compareValues}
           highlightedIndex={highlightedIndex}
           onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         />}
       </div>
     )

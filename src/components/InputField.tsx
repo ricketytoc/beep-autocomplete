@@ -7,7 +7,7 @@ interface InputFieldProps {
   placeholder?: string 
   disabled?: boolean 
   loading: boolean 
-  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(({ value, onChange, placeholder, disabled, loading, onKeyDown }, ref) => (
