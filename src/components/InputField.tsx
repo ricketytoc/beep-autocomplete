@@ -7,9 +7,10 @@ interface InputFieldProps {
   placeholder?: string 
   disabled?: boolean 
   loading: boolean 
+  onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const InputField = forwardRef<HTMLInputElement, InputFieldProps>(({ value, onChange, placeholder, disabled, loading }, ref) => (
+const InputField = forwardRef<HTMLInputElement, InputFieldProps>(({ value, onChange, placeholder, disabled, loading, onKeyDown }, ref) => (
   <div className='input-container'>
     <input
       type="text"
@@ -18,6 +19,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(({ value, onCha
       placeholder={placeholder}
       disabled={disabled}
       ref={ref}
+      onKeyDown={onKeyDown}
     />
     <img src={searchIcon} alt="Search Icon"/>
     {loading && <div className="spinner"></div>}

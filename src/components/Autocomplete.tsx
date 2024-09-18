@@ -38,9 +38,39 @@ const Autocomplete = <T extends string | { label: string, value: any }>({
   }: AutocompleteProps<T>) => {
     const [filteredOptions, setFilteredOptions] = useState<T[]>([])
     const [showOptions, setShowOptions] = useState<boolean>(false)
+    const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
 
     const referenceRef = useRef<HTMLInputElement | null>(null)
     const floatingRef = useRef<HTMLUListElement | null>(null)
+
+    const handleMouseEnter = (index: number) => {
+      setHighlightedIndex(index);
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          setHighlightedIndex((prevIndex) => (prevIndex + 1) % filteredOptions.length);
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          setHighlightedIndex((prevIndex) => 
+            (prevIndex - 1 + filteredOptions.length) % filteredOptions.length
+          );
+          break;
+        case 'Enter':
+          if (highlightedIndex >= 0) {
+            handleOptionSelect(filteredOptions[highlightedIndex]);
+          }
+          break;
+        case 'Escape':
+          setShowOptions(false);
+          break;
+        default:
+          break;
+      }
+    }
 
     // Update position of dropdown menu relative to the search input.
     useEffect(() => {
@@ -105,6 +135,10 @@ const Autocomplete = <T extends string | { label: string, value: any }>({
             onChange([option])
         }
       }
+
+      if (referenceRef.current) {
+        referenceRef.current.focus();
+      }
     }
   
     // Filter options based on input value
@@ -149,6 +183,7 @@ const Autocomplete = <T extends string | { label: string, value: any }>({
           disabled={disabled}
           ref={referenceRef}
           loading={loading}
+          onKeyDown={handleKeyDown}
         />
         <p className='description'>{description}</p>
         {showOptions && !disabled && 
@@ -160,6 +195,8 @@ const Autocomplete = <T extends string | { label: string, value: any }>({
           renderOption={renderOption}
           value={value}
           compareValues={compareValues}
+          highlightedIndex={highlightedIndex}
+          onMouseEnter={handleMouseEnter}
         />}
       </div>
     )
